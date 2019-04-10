@@ -137,13 +137,13 @@ class Graph:
         while queue.len() > 0:
             vert = queue.dequeue()
             if vert not in visited:
-                print("FIRST ADDED", vert)
+                # print("FIRST ADDED", vert)
                 visited.append(vert)
                 for next_vert in self.vertices[vert]:
                     queue.enqueue(next_vert)
         return visited
 
-    def df_traversal(self, starting_vert_id):
+    def df_traversal_stack(self, starting_vert_id):
         stack = []
         stack.append(starting_vert_id)
         visited = []
@@ -154,3 +154,17 @@ class Graph:
                 for next_vert in self.vertices[vert]:
                     stack.append(next_vert)
         return visited
+
+    def df_traversal_recursion(self, starting_vert_id, visited=None):
+        if visited is None:
+            visited = []
+        vert = starting_vert_id
+        if len(visited) != len(self.vertices.keys()):
+            if vert not in visited:
+                visited.append(vert)
+                for next_vert in self.vertices[vert]:
+                    return self.df_traversal_recursion(next_vert, visited)
+            else:
+                return self.df_traversal_recursion(vert, visited)
+        elif len(visited) == len(self.vertices.keys()):
+            return visited
