@@ -143,7 +143,6 @@ class SocialGraph:
         self.lastID = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
         # Add users
         for x in range(numUsers):
             self.addUser(x)
