@@ -21,50 +21,58 @@ world.loadGraph(roomGraph)
 # world.printRooms()  # prints map of room connections
 player = Player("Name", world.startingRoom)
 
-# needed for back track list
-opp_dirs = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
-# we need to store the dirs as values for each room
-visited = {}
-# set current room value
-visited[player.currentRoom.id] = player.currentRoom.getExits()
-# basically our stack since we'll have to pop dirs that were
-# just added (LIFO)
-back_track = []
+
 # result list
 path_traveled = []
+
+
+def get_path(cur_player, map_of_nodes):
+    # needed for back track list
+    opp_dirs = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
+    # we need to store the dirs as values for each room
+    visited = {}
+    # set current room value
+    visited[player.currentRoom.id] = player.currentRoom.getExits()
+    # basically our stack since we'll have to pop dirs that were
+    # just added (LIFO)
+    back_track = []
+    # while all rooms haven't been visited, already visited one
+    while len(list(visited)) < len(list(map_of_nodes)) - 1:
+        # if room hasn't been visited
+        if player.currentRoom.id not in visited:
+            # get exits for current room
+            visited[player.currentRoom.id] = player.currentRoom.getExits()
+            # we just came from back_track[-1],
+            # so mark opp dir in as visited in new room by removing it
+            visited[player.currentRoom.id].remove(back_track[-1])
+        # while rooms are empty, backtrack until you find one
+        while len(visited[player.currentRoom.id]) == 0 and len(back_track) > 0:
+            # since backtracking, pop, so we don't retrace our steps
+            direction_came_from = back_track.pop()
+            # add previous direction traveled to result arry since we're backtracking
+            path_traveled.append(direction_came_from)
+            # actually travel
+            player.travel(direction_came_from)
+        # no more exists and no more back_track
+        if len(visited[player.currentRoom.id]) == 0:
+            return path_traveled
+        rand_num = random.randint(0, len(
+            visited[player.currentRoom.id]) - 1) if len(visited[player.currentRoom.id]) > 0 else 0
+        # get last unexplored direction from current room
+        direction = visited[player.currentRoom.id].pop(rand_num) if len(
+            visited[player.currentRoom.id]) > rand_num else visited[player.currentRoom.id].pop()
+        # since map is geometric, flip direction for back_track list
+        back_track.append(opp_dirs[direction])
+        # add directions to path_traveled list
+        path_traveled.append(direction)
+        # actually travel
+        player.travel(direction)
+
+
 # added start time for runtime check
 start_time = time.time()
-# while all rooms haven't been visited, already visited one
-while len(list(visited)) < len(list(roomGraph)) - 1:
-    # if room hasn't been visited
-    if player.currentRoom.id not in visited:
-        # get exits for current room
-        visited[player.currentRoom.id] = player.currentRoom.getExits()
-        # we just came from back_track[-1],
-        # so mark opp dir in as visited in new room by removing it
-        visited[player.currentRoom.id].remove(back_track[-1])
-    # while rooms are empty, backtrack until you find one
-    while len(visited[player.currentRoom.id]) == 0 and len(back_track) > 0:
-        # since backtracking, pop, so we don't retrace our steps
-        direction_came_from = back_track.pop()
-        # add previous direction traveled to result arry since we're backtracking
-        path_traveled.append(direction_came_from)
-        # actually travel
-        player.travel(direction_came_from)
-    # no more exists and no more back_track
-    if len(visited[player.currentRoom.id]) == 0:
-        break
-    rand_num = random.randint(0, len(visited[player.currentRoom.id]) - 1) if len(visited[player.currentRoom.id]) > 0 else 0
-    # get last unexplored direction from current room
-    # direction = visited[player.currentRoom.id].pop() # og
-    direction = visited[player.currentRoom.id].pop(rand_num) if len(visited[player.currentRoom.id]) > rand_num else visited[player.currentRoom.id].pop()
-    # since map is geometric, flip direction for back_track list
-    back_track.append(opp_dirs[direction])
-    # add directions to path_traveled list
-    path_traveled.append(direction)
-    # actually travel
-    player.travel(direction)
-
+# find traversal path
+get_path(player, roomGraph)
 # FILL THIS IN
 traversalPath = path_traveled
 
