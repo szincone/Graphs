@@ -1,9 +1,9 @@
+from time import time
+from random import randint
 from room import Room
 from player import Player
 from world import World
 
-import random
-import time
 # Load world
 world = World()
 
@@ -21,10 +21,8 @@ world.loadGraph(roomGraph)
 # world.printRooms()  # prints map of room connections
 player = Player("Name", world.startingRoom)
 
-
 # result list
 path_traveled = []
-
 
 def get_path(cur_player, map_of_nodes):
     # needed for back track list
@@ -56,7 +54,8 @@ def get_path(cur_player, map_of_nodes):
         # no more exists and no more back_track
         if len(visited[player.currentRoom.id]) == 0:
             return path_traveled
-        rand_num = random.randint(0, len(
+        # find random unvisited direction from current room
+        rand_num = randint(0, len(
             visited[player.currentRoom.id]) - 1) if len(visited[player.currentRoom.id]) > 0 else 0
         # get last unexplored direction from current room
         direction = visited[player.currentRoom.id].pop(rand_num) if len(
@@ -70,7 +69,7 @@ def get_path(cur_player, map_of_nodes):
 
 
 # added start time for runtime check
-start_time = time.time()
+start_time = time()
 # find traversal path
 get_path(player, roomGraph)
 # FILL THIS IN
@@ -104,5 +103,5 @@ else:
 #     else:
 #         print("I did not understand that command.")
 if __name__ == '__main__':
-    end_time = time.time()
+    end_time = time()
     print(f"Linear runtime: {end_time - start_time} seconds")
