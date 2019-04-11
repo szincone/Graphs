@@ -3,7 +3,7 @@ from player import Player
 from world import World
 
 import random
-
+import time
 # Load world
 world = World()
 
@@ -32,8 +32,10 @@ visited[player.currentRoom.id] = player.currentRoom.getExits()
 back_track = []
 # result list
 path_traveled = []
-
-while len(list(visited)) < 499:
+# added start time for runtime check
+start_time = time.time()
+# while all rooms haven't been visited, already visited one
+while len(list(visited)) < len(list(roomGraph)) - 1:
     # if room hasn't been visited
     if player.currentRoom.id not in visited:
         # get exits for current room
@@ -93,3 +95,6 @@ else:
 #         player.travel(cmds[0], True)
 #     else:
 #         print("I did not understand that command.")
+if __name__ == '__main__':
+    end_time = time.time()
+    print(f"Linear runtime: {end_time - start_time} seconds")
