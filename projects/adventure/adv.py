@@ -72,9 +72,9 @@ def get_path(cur_player, map_of_nodes):
 start_time = time()
 # find traversal path
 get_path(player, roomGraph)
+
 # FILL THIS IN
 traversalPath = path_traveled
-
 
 # # TRAVERSAL TEST
 visited_rooms = set()
