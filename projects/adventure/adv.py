@@ -82,8 +82,16 @@ for move in traversalPath:
     player.travel(move)
     visited_rooms.add(player.currentRoom)
 
-while len(traversalPath) > 980 or len(visited_rooms) != 500 or len(traversalPath) == 0:
-    traversalPath = get_path(player, roomGraph)
+# while len(traversalPath) > 980 or len(visited_rooms) != 500 or len(traversalPath) == 0:
+#     traversalPath = get_path(player, roomGraph)
+
+with open('shortest_traversal.txt', 'w') as txt_file:
+    # writer = csv.writer(csv_file, delimiter=',')
+    txt_file.write('current shortest path')
+    txt_file.write(f" {len(traversalPath)} ")
+    for dir in traversalPath:
+        txt_file.write(f"{dir}, ")
+    
 
 if len(visited_rooms) == len(roomGraph):
     print(
