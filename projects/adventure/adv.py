@@ -82,7 +82,7 @@ for move in traversalPath:
     player.travel(move)
     visited_rooms.add(player.currentRoom)
 
-while (len(traversalPath) > 988 and len(visited_rooms) != 500 ) or len(traversalPath) == 0:
+while len(traversalPath) > 980 or len(visited_rooms) != 500 or len(traversalPath) == 0:
     traversalPath = get_path(player, roomGraph)
 
 if len(visited_rooms) == len(roomGraph):
